@@ -1,28 +1,26 @@
 const fs = require("fs");
 const csv = require('csv-parser')
 const { parse } = require("csv-parse");
+const sort = [];
 
 
-const earliestCheckIn = [];
+// const earliestCheckIn = [];
 const latestCheckIn = [];
-const users = [
-
-];
+const users = [];
 const companiesName = [];
-
-
-
-
-
+ 
 fs.createReadStream('Folder/data.csv')
     .pipe(csv())
-    .on('data', function (row) {
+    .on("data", data => sort.push(data))
+    .on('data',  function (row) {
         const earliest = (row.LastCheckInDate);
+ 
         const checkin1 = {
-
             checkin: row.LastCheckInDate,
         }
-        earliestCheckIn.push(checkin1)
+        console.log(checkin1)
+        // earliestCheckIn.push(checkin1)
+        // console.log(earliest)
     })
 
 
@@ -41,7 +39,8 @@ fs.createReadStream('Folder/data.csv')
             firstname: row.Firstname,
             surname: row.Surname,
         }
-        users.push(user)
+        users.push(user);
+          
     })
     .on('data', function (row) {
         const company = (row.Company);
@@ -49,15 +48,13 @@ fs.createReadStream('Folder/data.csv')
             company: row.Company,
         }
         companiesName.push(companyName)
+        
     })
     .on('end', function () {
-        console.table(earliestCheckIn)
+        // console.table(earliestCheckIn)
         console.table(latestCheckIn)
         console.table(users)
         console.table(companiesName)
-
-
-
     })
 
 
