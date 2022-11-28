@@ -1,4 +1,4 @@
-# Data
+# CSV File Data Management
 Description:
   I want to analyze my Company data so that I could take advantage of this info and make more money for my company (this is a highly competitive sector). No DB usage is needed, we just need to read the csv file and show the results on the screen.
 
