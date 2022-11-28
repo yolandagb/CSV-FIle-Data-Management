@@ -1,60 +1,72 @@
 const fs = require("fs");
 const csv = require('csv-parser')
 const { parse } = require("csv-parse");
-const sort = [];
 
 
-// const earliestCheckIn = [];
-const latestCheckIn = [];
-const users = [];
-const companiesName = [];
- 
 fs.createReadStream('Folder/data.csv')
     .pipe(csv())
-    .on("data", data => sort.push(data))
-    .on('data',  function (row) {
-        const earliest = (row.LastCheckInDate);
- 
-        const checkin1 = {
-            checkin: row.LastCheckInDate,
-        }
-        console.log(checkin1)
-        // earliestCheckIn.push(checkin1)
-        // console.log(earliest)
-    })
 
+    // .on('data', function (row) {
+    //     const earliest = [{ checkin: row.LastCheckInDate }]
+
+    //     let fullNames = costumers.map(function (row) {
+
+    //         return `${row.firstname} ${row.lastame}`;
+    //     })
+    //     console.log(fullNames)
+
+    //     .sort(function (a, b) { return a.LastCheckInDate - b.LastCheckInDate })
+    //     console.log(earliest)
+
+    // })
+    // .on('data', function (row) {
+    //     const latest = [
+    //         {
+    //             checkin: row.LastCheckInDate,
+    //         }
+    //     ]
+    //     let fullNames = costumers.map(function (row) {
+
+    //         return `${row.firstname} ${row.lastame}`;
+    //     })
+    //     console.log(fullNames)
+
+    // })
 
     .on('data', function (row) {
-        const latest = (row.LastCheckInDate);
-        const checkin2 = {
-
-            checkin: row.LastCheckInDate,
-        }
-        latestCheckIn.push(checkin2)
-    })
-
-    .on('data', function (row) {
-        const costumers = (row.Firstname, row.Surname);
-        const user = {
+        const costumers = [{
             firstname: row.Firstname,
-            surname: row.Surname,
-        }
-        users.push(user);
-          
+            lastame: row.Lastame,
+        }]
+
+        let fullNames = costumers.map(function (row) {
+
+            return `${row.firstname} ${row.lastame}`;
+        })
+        fullNames.sort(function (a, b) { return a.fullNames - b.fullNames })
+        console.log(fullNames)
+
     })
     .on('data', function (row) {
-        const company = (row.Company);
-        const companyName = {
-            company: row.Company,
-        }
-        companiesName.push(companyName)
-        
+
+        const companyName = [
+            {
+                company: row.Company
+            }
+        ]
+
+        let companies = companyName.map(function (row) {
+
+            return `${row.company}`;
+        })
+        companies.sort(function (a, b) { return a.fullNames - b.fullNames })
+
+        console.log(companies)
     })
     .on('end', function () {
-        // console.table(earliestCheckIn)
-        console.table(latestCheckIn)
-        console.table(users)
-        console.table(companiesName)
+
+
+
     })
 
 
