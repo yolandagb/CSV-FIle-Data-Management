@@ -2,30 +2,40 @@ const fs = require("fs");
 const csv = require('csv-parser')
 const { parse } = require("csv-parse");
 
+//We declare constasnt for later on display the data in tables
 const checkEarly =[];
 const checkLate =[];
 const fullNameSorted =[];
 const companyNameSorted =[];
 
-
+//Putting the fs. method to read the file
 fs.createReadStream('Folder/data.csv')
-    .pipe(csv())
 
+//Checking for errors before truing to pipe the data
+
+    .on('error', () => {
+       
+    })
+// starts to pipe data into which is listening to 5 events now
+    .pipe(csv())
+// returns each line row by row. in specific cases the row requested
     .on('data', function (row) {
+
+        
 
         const earliest = [
             {
                 checkin: row.LastCheckInDate
             }
-        ]
+        ].sort(function (a, b) { 
+            
+            return a.LastCheckInDate - b.LastCheckInDate 
+        })
 
         let checkin = earliest.map(function (row) {
 
-            return `${row.checkin}`;
+            return [row.checkin] ;
 
-        }).sort(function (a, b) { 
-            
-            return a.LastCheckInDate - b.LastCheckInDate 
         })
        
         checkEarly.push(checkin)
@@ -37,15 +47,17 @@ fs.createReadStream('Folder/data.csv')
             {
                 checkin: row.LastCheckInDate,
             }
-        ]
-        let checkin1 = latest.map(function (row) {
-
-            return `${row.checkin}`;
-
-        }).sort(function (a, b) {
+        ].sort(function (a, b) {
             
             return b.LastCheckInDate - a.LastCheckInDate
         })
+
+        let checkin1 = latest.map(function (row) {
+
+            return [row.checkin];
+
+        })
+
 
         checkLate.push(checkin1)
 
@@ -58,17 +70,18 @@ fs.createReadStream('Folder/data.csv')
                 firstname: row.Firstname,
                 lastname: row.Lastname,
             }
-        ]
-        function names  (a,b){
-            return a <b ? -1 : (a > b ? 1:0);
-        }
+        ].sort(function(a, b){
 
+            return b-a
+        })
+        
 
+        
         let  fullNames = costumers.map(function (row) {
 
-            return `${row.firstname} ${row.lastname}`;
+            return [row.firstname,row.lastname].join(" ");
 
-        }).sort(names)
+        })
 
         fullNameSorted.push(fullNames)
 
@@ -88,7 +101,7 @@ fs.createReadStream('Folder/data.csv')
 
         let companies = companyName.map(function (row) {
 
-            return `${row.company}`;
+            return [row.company];
 
         }).sort(name)
 
@@ -96,6 +109,7 @@ fs.createReadStream('Folder/data.csv')
 
     })
 
+    // listens to the end of the CSV
     .on('end', function () {
         console.table(checkEarly)
         console.table(checkLate);
