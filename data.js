@@ -36,7 +36,9 @@ fs.createReadStream('Folder/data.csv')
             
             return a.LastCheckInDate - b.LastCheckInDate 
         })
-       
+
+        console.error(checkin)
+
         checkEarly.push(checkin)
 })
 
@@ -60,8 +62,8 @@ fs.createReadStream('Folder/data.csv')
             
             return b.LastCheckInDate - a.LastCheckInDate
         })
-
-
+        
+        console.error(checkin1)
         checkLate.push(checkin1)
 
     })
@@ -87,6 +89,8 @@ fs.createReadStream('Folder/data.csv')
 
             return b-a
         })
+        console.error(fullNames)
+
 
         fullNameSorted.push(fullNames)
 
@@ -113,6 +117,7 @@ fs.createReadStream('Folder/data.csv')
         }).sort(name)
 
         companyNameSorted.push(companies)
+        console.error(companies)
 
     })
 
