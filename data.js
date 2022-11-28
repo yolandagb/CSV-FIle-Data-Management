@@ -20,22 +20,21 @@ fs.createReadStream('Folder/data.csv')
     .pipe(csv())
 // returns each line row by row. in specific cases the row requested
     .on('data', function (row) {
-
-        
+//declared a constant  to access our specific row, wich is mapped first and then sorted (notworkingthis bit)        
 
         const earliest = [
             {
                 checkin: row.LastCheckInDate
             }
-        ].sort(function (a, b) { 
-            
-            return a.LastCheckInDate - b.LastCheckInDate 
-        })
+        ]
 
         let checkin = earliest.map(function (row) {
 
             return [row.checkin] ;
 
+        }).sort(function (a, b) { 
+            
+            return a.LastCheckInDate - b.LastCheckInDate 
         })
        
         checkEarly.push(checkin)
@@ -47,15 +46,19 @@ fs.createReadStream('Folder/data.csv')
             {
                 checkin: row.LastCheckInDate,
             }
-        ].sort(function (a, b) {
-            
-            return b.LastCheckInDate - a.LastCheckInDate
-        })
+        ]
+
+        function name  (a,b){
+            return a < b ? -1 : (a > b ? 1:0);
+        }
 
         let checkin1 = latest.map(function (row) {
 
             return [row.checkin];
 
+        }).sort(function (a, b) {
+            
+            return b.LastCheckInDate - a.LastCheckInDate
         })
 
 
@@ -70,17 +73,19 @@ fs.createReadStream('Folder/data.csv')
                 firstname: row.Firstname,
                 lastname: row.Lastname,
             }
-        ].sort(function(a, b){
+        ]
 
-            return b-a
-        })
-        
+        function name  (a,b){
+            return a < b ? -1 : (a > b ? 1:0);
+        }
 
-        
         let  fullNames = costumers.map(function (row) {
 
             return [row.firstname,row.lastname].join(" ");
 
+        }).sort(function(a, b){
+
+            return b-a
         })
 
         fullNameSorted.push(fullNames)
@@ -89,11 +94,13 @@ fs.createReadStream('Folder/data.csv')
     
     .on('data', function (row) {
 
+
         const companyName = [
             {
                 company: row.Company
             }
         ]
+    // we tried here a different approach here for the mapping and sorting bit
 
         function name  (a,b){
             return a < b ? -1 : (a > b ? 1:0);
@@ -111,6 +118,7 @@ fs.createReadStream('Folder/data.csv')
 
     // listens to the end of the CSV
     .on('end', function () {
+    // we decided to display the date printed for  better access instead of a console.log
         console.table(checkEarly)
         console.table(checkLate);
         console.table(fullNameSorted);
